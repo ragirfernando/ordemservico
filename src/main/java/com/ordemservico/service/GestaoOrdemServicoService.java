@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Service
 public class GestaoOrdemServicoService {
@@ -25,7 +26,7 @@ public class GestaoOrdemServicoService {
                 .orElseThrow(() -> new NegocioException("Cliente não encontrado"));
         ordemServico.setCliente(cliente);
         ordemServico.setStatus(StatusOrdemServico.ABERTA);
-        ordemServico.setDataAbertura(LocalDateTime.now());
+        ordemServico.setDataAbertura(OffsetDateTime.now());
 
         return ordemServicoRepository.save(ordemServico);
     }

@@ -1,9 +1,7 @@
 package com.ordemservico.controller;
 
-import com.ordemservico.domain.Cliente;
 import com.ordemservico.domain.OrdemServico;
-import com.ordemservico.repository.ClienteRepository;
-import com.ordemservico.service.ClienteService;
+import com.ordemservico.repository.OrdemServicoRepository;
 import com.ordemservico.service.GestaoOrdemServicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,9 +15,16 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/ordens-servico")
 public class OrdemServicoController {
+    private GestaoOrdemServicoService gestaoOrdemServicoService;
+
+    private OrdemServicoRepository ordemServicoRepository;
+
 
     @Autowired
-    private GestaoOrdemServicoService gestaoOrdemServicoService;
+    public OrdemServicoController(GestaoOrdemServicoService gestaoOrdemServicoService, OrdemServicoRepository ordemServicoRepository) {
+        this.gestaoOrdemServicoService = gestaoOrdemServicoService;
+        this.ordemServicoRepository = ordemServicoRepository;
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -28,46 +33,20 @@ public class OrdemServicoController {
         return gestaoOrdemServicoService.criar(ordemServico);
     }
 
-    /*@Autowired
-    private ClienteService clienteService;
+    @GetMapping
+    public List<OrdemServico> listar() {
+        return ordemServicoRepository.findAll();
+    }
 
+    @GetMapping("/{ordemServicoId}")
+    public ResponseEntity<OrdemServico> listarId(@PathVariable Long ordemServicoId) {
+        Optional<OrdemServico> ordemServico = ordemServicoRepository.findById(ordemServicoId);
 
-
-    @GetMapping("/{clienteId}")
-    public ResponseEntity<Cliente> buscar(@PathVariable Long clienteId) {
-        Optional<Cliente> cliente = clienteRepository.findById(clienteId);
-        if (cliente.isPresent()) {
-            return ResponseEntity.ok(cliente.get());
+        if (ordemServico.isPresent()){
+            return ResponseEntity.ok(ordemServico.get());
         }
+
         return ResponseEntity.notFound().build();
     }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Cliente adicionar(@Valid @RequestBody Cliente cliente) {
-        return clienteService.adicionar(cliente);
-    }
-
-    @PutMapping("/{clienteId}")
-    public ResponseEntity<Cliente> atualizar(@Valid @PathVariable Long clienteId, @RequestBody Cliente cliente) {
-        if (!clienteRepository.existsById(clienteId)) {
-            return ResponseEntity.notFound().build();
-        }
-
-        cliente.setId(clienteId);
-        cliente = clienteService.adicionar(cliente);
-        return ResponseEntity.ok(cliente);
-    }
-
-    @DeleteMapping("/{clienteId}")
-    public ResponseEntity<Void> remover(@PathVariable Long clienteId) {
-        if (!clienteRepository.existsById(clienteId)) {
-            return ResponseEntity.notFound().build();
-        }
-
-        clienteService.excluir(clienteId);
-        return ResponseEntity.noContent().build();
-    }*/
-
 
 }
