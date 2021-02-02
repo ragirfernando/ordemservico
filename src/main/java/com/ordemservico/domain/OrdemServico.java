@@ -1,6 +1,7 @@
 package com.ordemservico.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ordemservico.api.exceptionhandler.NegocioException;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -126,5 +127,23 @@ public class OrdemServico implements Serializable {
     @Override
     public int hashCode() {
         return id.hashCode();
+    }
+
+    public boolean podeSerFinalizado(){
+        return StatusOrdemServico.ABERTA.equals(getStatus());
+    }
+
+    public boolean naoPodeSerFinalizado(){
+        return !podeSerFinalizado();
+    }
+
+    public void finalizar(){
+        if (naoPodeSerFinalizado()){
+            throw new NegocioException("Ordem de serviço não pode ser finalizada");
+        }
+
+        setStatus(StatusOrdemServico.FINALIZADA);
+        setDataFinalizacao(OffsetDateTime.now());
+
     }
 }
