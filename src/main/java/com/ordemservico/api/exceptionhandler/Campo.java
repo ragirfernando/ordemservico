@@ -1,4 +1,4 @@
-package com.ordemservico.exceptionhandler;
+package com.ordemservico.api.exceptionhandler;
 
 public class Campo {
     private String nome;

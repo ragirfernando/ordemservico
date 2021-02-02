@@ -1,4 +1,4 @@
-package com.ordemservico.controller;
+package com.ordemservico.api.controller;
 
 import com.ordemservico.domain.Cliente;
 import com.ordemservico.repository.ClienteRepository;

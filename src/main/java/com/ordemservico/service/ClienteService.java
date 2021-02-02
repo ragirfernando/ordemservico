@@ -1,7 +1,7 @@
 package com.ordemservico.service;
 
 import com.ordemservico.domain.Cliente;
-import com.ordemservico.exceptionhandler.NegocioException;
+import com.ordemservico.api.exceptionhandler.NegocioException;
 import com.ordemservico.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

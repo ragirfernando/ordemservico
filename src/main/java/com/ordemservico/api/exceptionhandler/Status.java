@@ -1,8 +1,7 @@
-package com.ordemservico.exceptionhandler;
+package com.ordemservico.api.exceptionhandler;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 

@@ -1,25 +1,34 @@
 package com.ordemservico.service;
 
+import com.ordemservico.api.exceptionhandler.EntidadeNaoEncontradaException;
 import com.ordemservico.domain.Cliente;
+import com.ordemservico.domain.Comentario;
 import com.ordemservico.domain.OrdemServico;
 import com.ordemservico.domain.StatusOrdemServico;
-import com.ordemservico.exceptionhandler.NegocioException;
+import com.ordemservico.api.exceptionhandler.NegocioException;
 import com.ordemservico.repository.ClienteRepository;
+import com.ordemservico.repository.ComentarioRepository;
 import com.ordemservico.repository.OrdemServicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 @Service
 public class GestaoOrdemServicoService {
 
-    @Autowired
     private OrdemServicoRepository  ordemServicoRepository;
 
-    @Autowired
     private ClienteRepository clienteRepository;
+
+    private ComentarioRepository comentarioRepository;
+
+    @Autowired
+    public GestaoOrdemServicoService(OrdemServicoRepository ordemServicoRepository, ClienteRepository clienteRepository, ComentarioRepository comentarioRepository) {
+        this.ordemServicoRepository = ordemServicoRepository;
+        this.clienteRepository = clienteRepository;
+        this.comentarioRepository = comentarioRepository;
+    }
 
     public OrdemServico criar (OrdemServico ordemServico){
         Cliente cliente = clienteRepository.findById(ordemServico.getCliente().getId())
@@ -29,6 +38,18 @@ public class GestaoOrdemServicoService {
         ordemServico.setDataAbertura(OffsetDateTime.now());
 
         return ordemServicoRepository.save(ordemServico);
+    }
+
+    public Comentario adicionarComentario (Long ordemServicoId, String descricao){
+        OrdemServico ordemServico = ordemServicoRepository.findById(ordemServicoId)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Ordem de serviço não encontrado"));
+
+        Comentario comentario = new Comentario();
+        comentario.setDataEnvio(OffsetDateTime.now());
+        comentario.setDescricao(descricao);
+        comentario.setOrdemServico(ordemServico);
+
+        return comentarioRepository.save(comentario);
     }
 
 

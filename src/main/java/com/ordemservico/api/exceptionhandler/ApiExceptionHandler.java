@@ -1,4 +1,4 @@
-package com.ordemservico.exceptionhandler;
+package com.ordemservico.api.exceptionhandler;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 
@@ -23,6 +22,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Autowired
     private MessageSource messageSource;
+
+    @ExceptionHandler(EntidadeNaoEncontradaException.class)
+    public ResponseEntity<Object> handlerNEntidadeNaoEncontrada(NegocioException ex, WebRequest request){
+        var status = HttpStatus.NOT_FOUND;
+        var statusRequisicao = new Status();
+        statusRequisicao.setStatus(status.value());
+        statusRequisicao.setTitulo(ex.getMessage());
+        statusRequisicao.setDataHora(OffsetDateTime.now());
+        return handleExceptionInternal(ex, statusRequisicao, new HttpHeaders(), status, request);
+    }
 
     @ExceptionHandler(NegocioException.class)
     public ResponseEntity<Object> handlerNegocio(NegocioException ex, WebRequest request){

@@ -13,6 +13,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class OrdemServico implements Serializable {
@@ -43,6 +45,17 @@ public class OrdemServico implements Serializable {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private OffsetDateTime dataFinalizacao;
+
+    @OneToMany(mappedBy = "ordemServico")
+    private List<Comentario> comentarios = new ArrayList<>();
+
+    public List<Comentario> getComentarios() {
+        return comentarios;
+    }
+
+    public void setComentarios(List<Comentario> comentarios) {
+        this.comentarios = comentarios;
+    }
 
     public Long getId() {
         return id;
